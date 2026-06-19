@@ -77,7 +77,6 @@
                             <th>Nom</th>
                             <th>Description</th>
                             <th>Prix (FC)</th>
-                            <th>Prix (USD)</th>
                             <th>Temps</th>
                             <th>Statut</th>
                             <th>Actions</th>
@@ -100,13 +99,7 @@
                             <td>
                                 <span class="text-primary fw-bold">{{ number_format($plat->prix, 0, ',', ' ') }} FC</span>
                             </td>
-                            <td>
-                                @if($plat->prix_usd)
-                                    <span class="text-success fw-bold">$ {{ number_format($plat->prix_usd, 2, ',', ' ') }} USD</span>
-                                @else
-                                    <span class="text-muted">—</span>
-                                @endif
-                            </td>
+                           
                             <td><i class="fas fa-clock me-1 text-muted"></i>{{ $plat->temps_preparation }} min</span></span></span></span></span></span></span></span></span></span></span></span>
                             <td>
                                 @if($plat->est_disponible)

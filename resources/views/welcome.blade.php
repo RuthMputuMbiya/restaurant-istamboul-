@@ -985,7 +985,7 @@
     <section class="section-dark">
         <div class="section-header">
             <h2>Nous <span>trouver</span></h2>
-            <p>Restaurant Istamboul - Avenue Mahenge, Lubumbashi</p>
+            <p>Restaurant Istanboul - Avenue Mahenge, Lubumbashi</p>
         </div>
         <div class="map-container" style="max-width: 1400px; margin: 0 auto;">
             <iframe 
@@ -1015,7 +1015,7 @@
     <footer class="footer" id="contact">
         <div class="footer-content">
             <div class="footer-col">
-                <h3><i class="fas fa-utensils"></i> Restaurant Istamboul</h3>
+                <h3><i class="fas fa-utensils"></i> Restaurant Istanboul</h3>
                 <p>La référence de la gastronomie à Lubumbashi. Une cuisine authentique et un service d'exception sur l'Avenue Mahenge.</p>
                 <div class="social-links">
                     <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
@@ -1049,7 +1049,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Restaurant Istamboul - Lubumbashi | Tous droits réservés | Créé avec <i class="fas fa-heart" style="color: #f39c12;"></i> pour nos clients</p>
+            <p>&copy; 2024 Restaurant Istanboul - Lubumbashi | Tous droits réservés | Créé avec <i class="fas fa-heart" style="color: #f39c12;"></i> pour nos clients</p>
         </div>
     </footer>
 
