@@ -1,4 +1,3 @@
-{{-- resources/views/gerant/categories/edit.blade.php --}}
 @extends('layouts.gerant')
 
 @section('title', 'Modifier la catégorie')
@@ -25,12 +24,14 @@
 
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card border-0 shadow-lg rounded-4">
-                <div class="card-header bg-gradient-warning text-white rounded-top-4 py-3">
-                    <h5 class="mb-0"><i class="fas fa-tag me-2"></i>{{ $categorie->nom }}</h5>
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white py-3 px-4 border-bottom">
+                    <h5 class="mb-0 fw-bold">
+                        <i class="fas fa-tag text-warning me-2"></i>{{ $category->nom }}
+                    </h5>
                 </div>
                 <div class="card-body p-4">
-                    <form method="POST" action="{{ route('gerant.categories.update', $categorie) }}">
+                    <form method="POST" action="{{ route('gerant.categories.update', $category->id) }}">
                         @csrf
                         @method('PUT')
 
@@ -41,7 +42,7 @@
                                     <i class="fas fa-tag text-primary"></i>
                                 </span>
                                 <input type="text" class="form-control @error('nom') is-invalid @enderror border-start-0" 
-                                       id="nom" name="nom" value="{{ old('nom', $categorie->nom) }}" required>
+                                       id="nom" name="nom" value="{{ old('nom', $category->nom) }}" required>
                             </div>
                             @error('nom')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -51,7 +52,7 @@
                         <div class="mb-4">
                             <label for="description" class="form-label fw-bold">Description</label>
                             <textarea class="form-control @error('description') is-invalid @enderror" 
-                                      id="description" name="description" rows="3">{{ old('description', $categorie->description) }}</textarea>
+                                      id="description" name="description" rows="3">{{ old('description', $category->description) }}</textarea>
                             @error('description')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
@@ -64,7 +65,7 @@
                                     <i class="fas fa-sort-numeric-down text-primary"></i>
                                 </span>
                                 <input type="number" class="form-control @error('ordre') is-invalid @enderror border-start-0" 
-                                       id="ordre" name="ordre" value="{{ old('ordre', $categorie->ordre) }}" min="0">
+                                       id="ordre" name="ordre" value="{{ old('ordre', $category->ordre) }}" min="0">
                             </div>
                             <small class="text-muted">Les catégories avec un ordre plus petit apparaissent en premier</small>
                             @error('ordre')
@@ -91,6 +92,9 @@
 <style>
     .bg-gradient-warning {
         background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+    .card-header {
+        border-bottom: 1px solid #e2e8f0;
     }
 </style>
 @endpush

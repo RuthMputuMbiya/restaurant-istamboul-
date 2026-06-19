@@ -37,7 +37,6 @@ class PaiementController extends Controller
         return view('client.paiement.payer', compact('commande'));
     }
 
-    // Traitement du paiement avec API réelle
     public function process(Request $request, Commande $commande)
     {
         $request->validate([
@@ -65,7 +64,6 @@ class PaiementController extends Controller
 
             DB::commit();
 
-            // Appel API selon le mode de paiement
             switch ($request->mode_paiement) {
                 case 'airtel_money':
                     $result = PaiementService::airtelMoney($telephone, $montant, $reference);
@@ -176,69 +174,82 @@ class PaiementController extends Controller
 
         return response()->json(['status' => 'ok']);
     }
+
+    // CORRIGÉ - Récupère la commande complète
     public function form_payement($idcommande)
     {
-        $commande = LigneCommande::where('commande_id', $idcommande)->with('menu')->first();
+        // Récupérer la commande complète avec ses lignes
+        $commande = Commande::with(['ligneCommandes.menu', 'client', 'table'])
+            ->findOrFail($idcommande);
 
-        return view('client.paiement.form_payement', compact('commande'));
+        // Récupérer la première ligne de commande (pour l'affichage)
+        $ligne = $commande->ligneCommandes->first();
+
+        return view('client.paiement.form_payement', compact('commande', 'ligne'));
     }
 
+    // CORRIGÉ - Utilise le bon ID de commande
     public function payercom(Request $request)
     {
         $payData = $request->validate([
             'commande_id' => 'required|exists:commandes,id',
             'montant' => 'required|numeric|min:0',
-            'numero_telephone' => 'nullable|string',
-            'encaisse_par' => 'nullable|string',
-            'date_paiement' => 'nullable|date',
-            'response_data' => 'nullable|string',
+            'numero_telephone' => 'nullable|string|min:9|max:10'
         ]);
 
+        // Récupérer la commande complète
+        $commande = Commande::with(['ligneCommandes.menu'])->findOrFail($payData['commande_id']);
 
+        // Vérifier que le montant correspond
+        if ($payData['montant'] != $commande->montant_total) {
+            return back()->withErrors('Le montant ne correspond pas à la commande.');
+        }
 
         Shwary::initFromArray([
-            'merchant_id' => 'f471e6bf-e4fd-4221-9f8c-5c2d00728aa3',
-            'merchant_key' => 'shwary_a1a64404-b91e-433a-b288-e393cefb5fe1',
-            'sandbox' => false,
+            'merchant_id' => env('SHWARY_MERCHANT_ID', 'f471e6bf-e4fd-4221-9f8c-5c2d00728aa3'),
+            'merchant_key' => env('SHWARY_MERCHANT_KEY', 'shwary_a1a64404-b91e-433a-b288-e393cefb5fe1'),
+            'sandbox' => env('SHWARY_SANDBOX', false),
             'timeout' => 60,
-
-            // 'ca_cert' => 'D:\Mr Philippe\PHP\PHP\v8.2.0\extras\ssl\\cacert.pem',
-
         ]);
 
         $country = Country::DRC;
-        $amount = $payData['montant'];
-        $phone = '+243' . $payData['numero_telephone'];
+        $amount = (int)$payData['montant'];
+        $phone = '+243' . ltrim($payData['numero_telephone'], '+243');
         $user = Auth::user();
 
         try {
             $transaction = Shwary::pay(
                 country: $country,
-                amount: (int)$amount,
+                amount: $amount,
                 phone: $phone,
-                callbackUrl: 'https://restaurant-istamboul.test/webhook',
+                callbackUrl: route('api.paiement.callback'),
             );
+
             if ($transaction) {
-                // Enregistrer le paiement dans la base de données
                 Paiement::create([
-                    'commande_id' => $payData['commande_id'],
+                    'commande_id' => $commande->id,
                     'client_id' => $user->id,
                     'montant' => $payData['montant'],
                     'mode_paiement' => 'Mobile Money',
                     'numero_telephone' => $phone,
                     'reference' => 'REF-' . uniqid(),
-                    'transaction_id' => $transaction->id,
+                    'transaction_id' => $transaction->id ?? null,
                     'statut' => 'en_attente',
                     'date_paiement' => now(),
-                    'response_data' => json_encode($transaction->toArray())
+                    'response_data' => json_encode($transaction->toArray() ?? [])
                 ]);
 
-                return back()->with('success', 'Paiement initié avec succès. En attente de confirmation.');
-            } else {
-                return back()->withErrors('Échec du paiement: ' . $transaction->getMessage());
+                return redirect()->route('client.paiement.success', $commande->id)
+                    ->with('success', 'Paiement initié avec succès. En attente de confirmation.');
             }
+
+            return back()->withErrors('Échec du paiement: Transaction non aboutie');
         } catch (ShwaryException $e) {
+            Log::error('ShwaryException: ' . $e->getMessage());
             return back()->withErrors('Erreur lors du paiement: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            Log::error('Paiement error: ' . $e->getMessage());
+            return back()->withErrors('Erreur: ' . $e->getMessage());
         }
     }
 }

@@ -19,24 +19,41 @@ class DashboardController extends Controller
     public function index()
     {
         try {
-            // Statistiques du jour
+            // ==========================================
+            // STATISTIQUES AUTOMATIQUES
+            // ==========================================
+
+            // Commandes
             $commandesAujourdhui = Commande::whereDate('created_at', today())->count();
-            $chiffreAffaires = Paiement::whereDate('date_paiement', today())->where('statut', 'valide')->sum('montant') ?? 0;
+            $totalCommandes = Commande::count();
+
+            // Chiffre d'affaires
+            $chiffreAffaires = Paiement::where('statut', 'valide')->sum('montant') ?? 0;
+            $caJour = Paiement::whereDate('date_paiement', today())->where('statut', 'valide')->sum('montant') ?? 0;
+
+            // Clients
             $totalClients = User::where('role_id', 1)->count();
+
+            // Tables
             $totalTables = TableResto::count();
             $tablesLibres = TableResto::where('statut', 'libre')->count();
+
+            // Réservations
             $reservationsJour = Reservation::whereDate('date_reservation', today())->count();
+            $reservationsTotal = Reservation::count();
+
+            // Commandes par statut
             $commandesEnAttente = Commande::where('statut', 'validee')->count();
             $commandesEnPreparation = Commande::where('statut', 'en_preparation')->count();
             $commandesPretes = Commande::where('statut', 'pret')->count();
-            
-            // Dernières commandes
+
+            // Dernières commandes (5 dernières)
             $dernieresCommandes = Commande::with(['table'])
                 ->latest()
                 ->take(5)
                 ->get();
-            
-            // Top plats
+
+            // Top 5 plats les plus vendus
             $topPlats = DB::table('ligne_commandes')
                 ->join('menus', 'ligne_commandes.menu_id', '=', 'menus.id')
                 ->select('menus.nom', DB::raw('SUM(ligne_commandes.quantite) as total_ventes'))
@@ -44,26 +61,33 @@ class DashboardController extends Controller
                 ->orderBy('total_ventes', 'desc')
                 ->take(5)
                 ->get();
-            
-            // Graphique CA 7 jours
+
+            // Graphique : CA des 7 derniers jours
             $joursSemaine = [];
             $ventesParJour = [];
             for ($i = 6; $i >= 0; $i--) {
                 $date = now()->subDays($i);
                 $joursSemaine[] = $date->translatedFormat('D');
-                $ventesParJour[] = Paiement::whereDate('date_paiement', $date)->where('statut', 'valide')->sum('montant') ?? 0;
+                $ventesParJour[] = Paiement::whereDate('date_paiement', $date)
+                    ->where('statut', 'valide')
+                    ->sum('montant') ?? 0;
             }
-            
+
             // CA du mois
-            $caMois = Paiement::whereMonth('date_paiement', now()->month)->where('statut', 'valide')->sum('montant') ?? 0;
-            
+            $caMois = Paiement::whereMonth('date_paiement', now()->month)
+                ->where('statut', 'valide')
+                ->sum('montant') ?? 0;
+
             return view('gerant.dashboard', compact(
                 'commandesAujourdhui',
+                'totalCommandes',
                 'chiffreAffaires',
+                'caJour',
                 'totalClients',
                 'totalTables',
                 'tablesLibres',
                 'reservationsJour',
+                'reservationsTotal',
                 'commandesEnAttente',
                 'commandesEnPreparation',
                 'commandesPretes',
@@ -73,16 +97,18 @@ class DashboardController extends Controller
                 'ventesParJour',
                 'caMois'
             ));
-            
         } catch (\Exception $e) {
-            // En cas d'erreur, retourner la vue avec des valeurs par défaut
+            // En cas d'erreur, retourner des valeurs par défaut
             return view('gerant.dashboard', [
                 'commandesAujourdhui' => 0,
+                'totalCommandes' => 0,
                 'chiffreAffaires' => 0,
+                'caJour' => 0,
                 'totalClients' => 0,
                 'totalTables' => 0,
                 'tablesLibres' => 0,
                 'reservationsJour' => 0,
+                'reservationsTotal' => 0,
                 'commandesEnAttente' => 0,
                 'commandesEnPreparation' => 0,
                 'commandesPretes' => 0,
