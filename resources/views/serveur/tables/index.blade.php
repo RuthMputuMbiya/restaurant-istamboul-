@@ -22,46 +22,6 @@
             </button>
         </div>
 
-        <!-- Stats -->
-        <div class="stats-grid mb-4">
-            <div class="stat-card">
-                <div class="stat-icon green">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-value">{{ $stats['libres'] ?? 0 }}</span>
-                    <span class="stat-label">Tables libres</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon red">
-                    <i class="fas fa-circle"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-value">{{ $stats['occupees'] ?? 0 }}</span>
-                    <span class="stat-label">Tables occupées</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon orange">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-value">{{ $stats['reservees'] ?? 0 }}</span>
-                    <span class="stat-label">Tables réservées</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon blue">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-value">{{ $stats['total'] ?? 0 }}</span>
-                    <span class="stat-label">Total tables</span>
-                </div>
-            </div>
-        </div>
-
         <!-- Tables Grid -->
         <div class="tables-grid">
             @forelse($tables as $table)

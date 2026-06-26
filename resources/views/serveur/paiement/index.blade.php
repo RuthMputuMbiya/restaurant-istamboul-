@@ -7,43 +7,7 @@
 @section('serveur-content')
 <div class="container-fluid px-4 py-4">
 
-    <!-- Statistiques Paiements -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-4">
-            <div class="stats-card">
-                <div class="stats-icon" style="background: #d1fae5; color: #059669;">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="stats-content">
-                    <div class="stats-label">Paiements aujourd'hui</div>
-                    <div class="stats-number" style="color: #059669;">{{ $paiementsRecents->where('date_paiement', today())->count() ?? 0 }}</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stats-card">
-                <div class="stats-icon" style="background: #fef3c7; color: #d97706;">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stats-content">
-                    <div class="stats-label">En attente</div>
-                    <div class="stats-number" style="color: #d97706;">{{ $paiementsEnAttente->count() ?? 0 }}</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stats-card">
-                <div class="stats-icon" style="background: #ede9fe; color: #6d28d9;">
-                    <i class="fas fa-phone-alt"></i>
-                </div>
-                <div class="stats-content">
-                    <div class="stats-label">Mobile Money</div>
-                    <div class="stats-number" style="color: #6d28d9;">{{ ($paiementsRecents->where('mode_paiement', 'airtel_money')->count() + $paiementsRecents->where('mode_paiement', 'orange_money')->count()) ?? 0 }}</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+   
     <!-- Paiements en ligne en attente -->
     @if(isset($paiementsEnAttente) && $paiementsEnAttente->count() > 0)
     <div class="row mb-4">

@@ -23,37 +23,6 @@
             </div>
         </div>
 
-        <!-- Stats -->
-        <div class="stats-grid mb-4">
-            <div class="stat-card">
-                <div class="stat-icon purple">
-                    <i class="fas fa-today"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-value">{{ $stats['aujourdhui'] ?? 0 }}</span>
-                    <span class="stat-label">Réservations aujourd'hui</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon blue">
-                    <i class="fas fa-calendar-week"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-value">{{ $stats['semaine'] ?? 0 }}</span>
-                    <span class="stat-label">Cette semaine</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon green">
-                    <i class="fas fa-calendar-alt"></i>
-                </div>
-                <div class="stat-info">
-                    <span class="stat-value">{{ $stats['mois'] ?? 0 }}</span>
-                    <span class="stat-label">Ce mois</span>
-                </div>
-            </div>
-        </div>
-
         <!-- Reservations Table -->
         <div class="reservations-table-wrapper">
             <table class="reservations-table">

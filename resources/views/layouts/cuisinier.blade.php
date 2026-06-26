@@ -190,12 +190,6 @@
                             <i class="fas fa-tachometer-alt"></i> Dashboard
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <!-- UTILISER UNE URL DIRECTE AU LIEU DE route() -->
-                        <a class="nav-link {{ request()->routeIs('cuisinier.commandes*') ? 'active' : '' }}" href="/cuisinier/commandes">
-                            <i class="fas fa-clipboard-list"></i> Commandes
-                        </a>
-                    </li>
                 </ul>
                 
                 <div class="user-info">

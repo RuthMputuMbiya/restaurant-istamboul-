@@ -1,6 +1,6 @@
 @extends('layouts.gerant')
 
-@section('title', 'Dashboard')
+@section('title', 'Tableau de bord')
 @section('page-title', 'Tableau de bord')
 @section('page-subtitle', 'Aperçu général de votre restaurant')
 
@@ -8,110 +8,198 @@
 <div class="container-fluid px-0">
 
     <!-- ========================================== -->
-    <!-- EN-TÊTE D'ACCUEIL -->
+    <!-- EN-TÊTE AVEC STATS RAPIDES -->
     <!-- ========================================== -->
-    <div class="welcome-section mb-4">
-        <div class="welcome-card">
-            <div class="welcome-content">
-                <div>
-                    <h2 class="welcome-title">👋 Bonjour, {{ Auth::user()->name ?? 'Gérant' }} !</h2>
-                    <p class="welcome-subtitle">Voici un aperçu de l'activité de votre restaurant</p>
-                </div>
-                <div class="welcome-date">
-                    <i class="fas fa-calendar-alt me-2"></i>
-                    {{ now()->translatedFormat('l d F Y') }}
-                </div>
-            </div>
+    <div class="dashboard-header mb-4">
+        <div class="header-left">
+            <h2 class="header-title">👋 Bonjour, {{ Auth::user()->name ?? 'Gérant' }} !</h2>
+            <p class="header-subtitle">Voici un aperçu de l'activité de votre restaurant</p>
         </div>
-    </div>
-
-  
-
-    <!-- ========================================== -->
-    <!-- DEUXIÈME LIGNE - 3 CARTES -->
-    <!-- ========================================== -->
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="stat-card stat-card-alt">
-                <div class="stat-icon bg-primary-light">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div class="stat-info">
-                    <div class="stat-value">{{ $reservationsJour ?? 0 }}</div>
-                    <div class="stat-label">Réservations aujourd'hui</div>
-                </div>
+        <div class="header-right">
+            <div class="header-date">
+                <i class="fas fa-calendar-alt me-2"></i>
+                {{ now()->translatedFormat('l d F Y') }}
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stat-card stat-card-alt">
-                <div class="stat-icon bg-success-light">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="stat-info">
-                    <div class="stat-value">{{ $commandesEnAttente ?? 0 }}</div>
-                    <div class="stat-label">Commandes en attente</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stat-card stat-card-alt">
-                <div class="stat-icon bg-warning-light">
-                    <i class="fas fa-fire"></i>
-                </div>
-                <div class="stat-info">
-                    <div class="stat-value">{{ $commandesEnPreparation ?? 0 }}</div>
-                    <div class="stat-label">En préparation</div>
-                </div>
+            <div class="header-badge">
+                <span class="badge-dot"></span>
+                En ligne
             </div>
         </div>
     </div>
 
     <!-- ========================================== -->
-    <!-- GRAPHIQUE ET TOP PLATS -->
+    <!-- 4 CARTES PRINCIPALES -->
     <!-- ========================================== -->
-    <div class="row g-4 mb-5">
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-card-gradient-1">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3 class="stat-card-value">{{ number_format($chiffreAffaires ?? 0, 0, ',', ' ') }}</h3>
+                        <p class="stat-card-label">Chiffre d'affaires total</p>
+                        <div class="stat-card-sub">
+                            <span class="text-light opacity-75 small">{{ $caJour ?? 0 }} FC aujourd'hui</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-card-gradient-2">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3 class="stat-card-value">{{ $commandesAujourdhui ?? 0 }}</h3>
+                        <p class="stat-card-label">Commandes aujourd'hui</p>
+                        <div class="stat-card-sub">
+                            <span class="text-light opacity-75 small">{{ $totalCommandes ?? 0 }} au total</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-card-gradient-3">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3 class="stat-card-value">{{ $reservationsJour ?? 0 }}</h3>
+                        <p class="stat-card-label">Réservations du jour</p>
+                        <div class="stat-card-sub">
+                            <span class="text-light opacity-75 small">{{ $reservationsTotal ?? 0 }} au total</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="stat-card stat-card-gradient-4">
+                <div class="stat-card-body">
+                    <div class="stat-card-icon">
+                        <i class="fas fa-chair"></i>
+                    </div>
+                    <div class="stat-card-info">
+                        <h3 class="stat-card-value">{{ $tauxOccupation ?? 0 }}%</h3>
+                        <p class="stat-card-label">Tables occupées</p>
+                        <div class="stat-card-sub">
+                            <span class="text-light opacity-75 small">{{ $tablesOccupees ?? 0 }}/{{ $totalTables ?? 0 }} tables</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- STATUTS DES COMMANDES -->
+    <!-- ========================================== -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="status-strip">
+                <div class="status-strip-item">
+                    <span class="status-strip-dot bg-warning"></span>
+                    <span class="status-strip-label">En attente</span>
+                    <span class="status-strip-value">{{ $statsCommandes['en_attente'] ?? 0 }}</span>
+                </div>
+                <div class="status-strip-item">
+                    <span class="status-strip-dot bg-primary"></span>
+                    <span class="status-strip-label">Validées</span>
+                    <span class="status-strip-value">{{ $statsCommandes['validee'] ?? 0 }}</span>
+                </div>
+                <div class="status-strip-item">
+                    <span class="status-strip-dot bg-info"></span>
+                    <span class="status-strip-label">En préparation</span>
+                    <span class="status-strip-value">{{ $statsCommandes['en_preparation'] ?? 0 }}</span>
+                </div>
+                <div class="status-strip-item">
+                    <span class="status-strip-dot bg-success"></span>
+                    <span class="status-strip-label">Prêtes</span>
+                    <span class="status-strip-value">{{ $statsCommandes['pret'] ?? 0 }}</span>
+                </div>
+                <div class="status-strip-item">
+                    <span class="status-strip-dot bg-secondary"></span>
+                    <span class="status-strip-label">Servies</span>
+                    <span class="status-strip-value">{{ $statsCommandes['servi'] ?? 0 }}</span>
+                </div>
+                <div class="status-strip-item">
+                    <span class="status-strip-dot bg-success"></span>
+                    <span class="status-strip-label">Payées</span>
+                    <span class="status-strip-value">{{ $statsCommandes['paye'] ?? 0 }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- GRAPHIQUE + TOP PLATS -->
+    <!-- ========================================== -->
+    <div class="row g-4 mb-4">
         <div class="col-lg-8">
             <div class="widget-card">
                 <div class="widget-header">
-                    <h5 class="widget-title">
-                        <i class="fas fa-chart-line text-primary me-2"></i>
-                        Évolution du chiffre d'affaires
-                    </h5>
-                    <p class="widget-subtitle">7 derniers jours</p>
+                    <div>
+                        <h5 class="widget-title">
+                            <i class="fas fa-chart-line text-primary me-2"></i>
+                            Évolution du chiffre d'affaires
+                        </h5>
+                        <p class="widget-subtitle">7 derniers jours</p>
+                    </div>
+                    <div class="widget-header-actions">
+                        <span class="widget-total">
+                            <span class="text-muted">Total : </span>
+                            <strong>{{ number_format(array_sum($ventesParJour ?? [0]), 0, ',', ' ') }} FC</strong>
+                        </span>
+                    </div>
                 </div>
                 <div class="widget-body">
-                    <canvas id="salesChart" height="300"></canvas>
+                    <canvas id="salesChart" height="280"></canvas>
                 </div>
             </div>
         </div>
         <div class="col-lg-4">
             <div class="widget-card">
                 <div class="widget-header">
-                    <h5 class="widget-title">
-                        <i class="fas fa-trophy text-warning me-2"></i>
-                        Top 5 plats
-                    </h5>
-                    <p class="widget-subtitle">Les plus vendus</p>
+                    <div>
+                        <h5 class="widget-title">
+                            <i class="fas fa-trophy text-warning me-2"></i>
+                            Top 5 plats
+                        </h5>
+                        <p class="widget-subtitle">Les plus vendus</p>
+                    </div>
                 </div>
                 <div class="widget-body">
                     @if(isset($topPlats) && $topPlats->count() > 0)
                         @foreach($topPlats as $index => $plat)
                         <div class="rank-item">
-                            <div class="rank-number">{{ $index + 1 }}</div>
+                            <div class="rank-number rank-{{ $index + 1 }}">
+                                {{ $index + 1 }}
+                            </div>
                             <div class="rank-info">
                                 <div class="rank-name">{{ $plat->nom }}</div>
-                                <div class="rank-sales">{{ $plat->total_ventes }} ventes</div>
+                                <div class="rank-sales">
+                                    <i class="fas fa-shopping-bag me-1"></i>
+                                    {{ $plat->total_ventes }} ventes
+                                </div>
                             </div>
                             <div class="rank-percent">
-                                {{ round(($plat->total_ventes / ($topPlats->first()->total_ventes ?? 1)) * 100) }}%
+                                <div class="rank-bar" style="width: {{ round(($plat->total_ventes / ($topPlats->first()->total_ventes ?? 1)) * 100) }}%"></div>
                             </div>
                         </div>
                         @endforeach
                     @else
                         <div class="empty-state text-center py-4">
-                            <i class="fas fa-chart-simple fa-3x text-muted mb-3 d-block"></i>
-                            <p class="text-muted mb-0">Aucune donnée disponible</p>
-                            <span class="text-muted small">Les ventes apparaîtront ici</span>
+                            <div class="empty-state-icon">
+                                <i class="fas fa-chart-simple"></i>
+                            </div>
+                            <p class="empty-state-text">Aucune donnée disponible</p>
+                            <span class="empty-state-sub">Les ventes apparaîtront ici</span>
                         </div>
                     @endif
                 </div>
@@ -126,11 +214,17 @@
         <div class="col-12">
             <div class="widget-card">
                 <div class="widget-header">
-                    <div class="d-flex align-items-center">
-                        <i class="fas fa-clock text-warning me-2"></i>
-                        <h5 class="widget-title mb-0">Dernières commandes</h5>
+                    <div>
+                        <h5 class="widget-title">
+                            <i class="fas fa-clock text-warning me-2"></i>
+                            Dernières commandes
+                        </h5>
+                        <p class="widget-subtitle">5 dernières commandes enregistrées</p>
                     </div>
-                    <span class="text-muted small">5 dernières commandes</span>
+                    <!-- LIEN CORRIGE - Utilise gerant.statistiques au lieu de gerant.commandes -->
+                    <a href="{{ route('gerant.statistiques') }}" class="btn btn-sm btn-outline-primary">
+                        Voir tout <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
                 </div>
                 <div class="widget-body p-0">
                     @if(isset($dernieresCommandes) && $dernieresCommandes->count() > 0)
@@ -140,6 +234,7 @@
                                     <tr>
                                         <th>N° Commande</th>
                                         <th>Table</th>
+                                        <th>Client</th>
                                         <th>Montant</th>
                                         <th>Statut</th>
                                         <th>Date</th>
@@ -148,9 +243,19 @@
                                 <tbody>
                                     @foreach($dernieresCommandes as $commande)
                                     <tr>
-                                        <td>#{{ $commande->id }}</td>
-                                        <td>Table {{ $commande->table->numero ?? 'N/A' }}</td>
-                                        <td>{{ number_format($commande->montant_total ?? 0, 0, ',', ' ') }} FC</td>
+                                        <td>
+                                            <span class="commande-number">#{{ $commande->id }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="table-badge">
+                                                <i class="fas fa-chair me-1"></i>
+                                                Table {{ $commande->table->numero ?? 'N/A' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $commande->user->name ?? '---' }}</td>
+                                        <td>
+                                            <span class="montant">{{ number_format($commande->montant_total ?? 0, 0, ',', ' ') }} FC</span>
+                                        </td>
                                         <td>
                                             @php
                                                 $statusConfig = [
@@ -165,7 +270,9 @@
                                             @endphp
                                             <span class="status-badge {{ $config['class'] }}">{{ $config['text'] }}</span>
                                         </td>
-                                        <td>{{ $commande->created_at->format('d/m/Y H:i') }}</td>
+                                        <td class="text-muted small">
+                                            {{ $commande->created_at->format('d/m/Y H:i') }}
+                                        </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -173,9 +280,11 @@
                         </div>
                     @else
                         <div class="empty-state text-center py-5">
-                            <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
-                            <p class="text-muted mb-0">Aucune commande récente</p>
-                            <span class="text-muted small">Les commandes apparaîtront ici</span>
+                            <div class="empty-state-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <p class="empty-state-text">Aucune commande récente</p>
+                            <span class="empty-state-sub">Les commandes apparaîtront ici</span>
                         </div>
                     @endif
                 </div>
@@ -188,101 +297,186 @@
 @push('styles')
 <style>
     /* ========================================== */
-    /* WELCOME SECTION */
+    /* HEADER MODERNE */
     /* ========================================== */
-    .welcome-card {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    .dashboard-header {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
         border-radius: 24px;
-        padding: 30px 35px;
-        color: white;
-        position: relative;
-        overflow: hidden;
-    }
-    .welcome-card::before {
-        content: '🍽️';
-        position: absolute;
-        bottom: -20px;
-        right: 20px;
-        font-size: 120px;
-        opacity: 0.08;
-    }
-    .welcome-title {
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 5px;
-    }
-    .welcome-subtitle {
-        font-size: 14px;
-        opacity: 0.8;
-        margin: 0;
-    }
-    .welcome-date {
-        font-size: 14px;
-        opacity: 0.8;
-        padding: 8px 16px;
-        background: rgba(255,255,255,0.12);
-        border-radius: 30px;
-        backdrop-filter: blur(10px);
-    }
-    .welcome-content {
+        padding: 28px 32px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 15px;
         position: relative;
+        overflow: hidden;
+    }
+    .dashboard-header::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .header-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #fff;
+        margin: 0;
+    }
+    .header-subtitle {
+        font-size: 14px;
+        color: rgba(255,255,255,0.7);
+        margin: 0;
+    }
+    .header-right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        position: relative;
         z-index: 2;
+    }
+    .header-date {
+        color: rgba(255,255,255,0.8);
+        font-size: 14px;
+        padding: 8px 16px;
+        background: rgba(255,255,255,0.08);
+        border-radius: 30px;
+    }
+    .header-badge {
+        color: #4ade80;
+        font-size: 13px;
+        padding: 8px 16px;
+        background: rgba(74,222,128,0.12);
+        border-radius: 30px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .badge-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4ade80;
+        animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.5; transform: scale(1.2); }
     }
 
     /* ========================================== */
-    /* STAT CARDS */
+    /* STAT CARDS GRADIENT */
     /* ========================================== */
     .stat-card {
-        background: white;
         border-radius: 20px;
-        padding: 20px 24px;
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        padding: 24px;
+        color: #fff;
         transition: all 0.3s ease;
         height: 100%;
+        min-height: 140px;
     }
     .stat-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
     }
-    .stat-card-alt {
-        background: #f8fafc;
+    .stat-card-gradient-1 {
+        background: linear-gradient(135deg, #1e3a5f 0%, #1a365d 100%);
     }
-    .stat-icon {
-        width: 55px;
-        height: 55px;
-        border-radius: 16px;
+    .stat-card-gradient-2 {
+        background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+    }
+    .stat-card-gradient-3 {
+        background: linear-gradient(135deg, #234e7c 0%, #1a365d 100%);
+    }
+    .stat-card-gradient-4 {
+        background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    }
+    .stat-card-body {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        height: 100%;
+    }
+    .stat-card-icon {
+        width: 52px;
+        height: 52px;
+        background: rgba(255,255,255,0.12);
+        border-radius: 14px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
-        color: white;
+        font-size: 22px;
         flex-shrink: 0;
     }
-    .bg-primary { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-    .bg-success { background: linear-gradient(135deg, #10b981, #059669); }
-    .bg-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
-    .bg-info { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-    .bg-primary-light { background: rgba(59,130,246,0.12); color: #3b82f6; }
-    .bg-success-light { background: rgba(16,185,129,0.12); color: #10b981; }
-    .bg-warning-light { background: rgba(245,158,11,0.12); color: #f59e0b; }
+    .stat-card-info {
+        flex: 1;
+    }
+    .stat-card-value {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.2;
+    }
+    .stat-card-label {
+        font-size: 12px;
+        opacity: 0.7;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .stat-card-sub {
+        margin-top: 4px;
+    }
 
-    .stat-info { flex: 1; }
-    .stat-value { font-size: 26px; font-weight: 800; color: #1e293b; line-height: 1.2; }
-    .stat-label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+    /* ========================================== */
+    /* STATUS STRIP */
+    /* ========================================== */
+    .status-strip {
+        background: #fff;
+        border-radius: 20px;
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .status-strip-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 12px;
+        background: #f8fafc;
+        border-radius: 30px;
+    }
+    .status-strip-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+    }
+    .status-strip-label {
+        font-size: 12px;
+        color: #64748b;
+    }
+    .status-strip-value {
+        font-weight: 700;
+        color: #1e293b;
+        font-size: 16px;
+        min-width: 20px;
+        text-align: center;
+    }
 
     /* ========================================== */
     /* WIDGET CARDS */
     /* ========================================== */
     .widget-card {
-        background: white;
+        background: #fff;
         border-radius: 20px;
         box-shadow: 0 2px 12px rgba(0,0,0,0.06);
         overflow: hidden;
@@ -297,14 +491,34 @@
         flex-wrap: wrap;
         gap: 10px;
     }
-    .widget-title { font-size: 16px; font-weight: 700; margin: 0; color: #1e293b; }
-    .widget-subtitle { font-size: 12px; color: #64748b; margin: 0; }
-    .widget-body { padding: 20px; }
+    .widget-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+        color: #1e293b;
+    }
+    .widget-subtitle {
+        font-size: 12px;
+        color: #64748b;
+        margin: 0;
+    }
+    .widget-body {
+        padding: 20px;
+    }
+    .widget-total {
+        font-size: 14px;
+    }
+    .widget-total strong {
+        color: #1e293b;
+    }
 
     /* ========================================== */
     /* TABLE */
     /* ========================================== */
-    .data-table { width: 100%; margin-bottom: 0; }
+    .data-table {
+        width: 100%;
+        margin-bottom: 0;
+    }
     .data-table th {
         padding: 12px 16px;
         font-size: 11px;
@@ -322,6 +536,22 @@
     }
     .data-table tr:last-child td { border-bottom: none; }
     .data-table tr:hover { background: #f8fafc; }
+
+    .commande-number {
+        font-weight: 700;
+        color: #1e293b;
+    }
+    .table-badge {
+        background: #f1f5f9;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        color: #475569;
+    }
+    .montant {
+        font-weight: 600;
+        color: #1e293b;
+    }
 
     /* ========================================== */
     /* STATUS BADGES */
@@ -351,43 +581,80 @@
     }
     .rank-item:last-child { border-bottom: none; }
     .rank-number {
-        width: 32px;
-        height: 32px;
-        background: #f59e0b;
-        border-radius: 10px;
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
+        color: #fff;
         font-weight: 700;
-        font-size: 14px;
+        font-size: 13px;
+        flex-shrink: 0;
     }
+    .rank-1 { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+    .rank-2 { background: linear-gradient(135deg, #94a3b8, #64748b); }
+    .rank-3 { background: linear-gradient(135deg, #fb923c, #f97316); }
+    .rank-4 { background: #cbd5e1; color: #475569; }
+    .rank-5 { background: #e2e8f0; color: #64748b; }
     .rank-info { flex: 1; }
     .rank-name { font-weight: 600; font-size: 14px; color: #1e293b; }
     .rank-sales { font-size: 11px; color: #64748b; }
-    .rank-percent { font-weight: 700; color: #10b981; font-size: 14px; }
+    .rank-percent {
+        width: 60px;
+        height: 4px;
+        background: #e2e8f0;
+        border-radius: 4px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    .rank-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #10b981, #34d399);
+        border-radius: 4px;
+        transition: width 0.6s ease;
+    }
 
     /* ========================================== */
     /* EMPTY STATE */
     /* ========================================== */
-    .empty-state {
-        padding: 30px 20px;
+    .empty-state-icon {
+        font-size: 48px;
+        color: #cbd5e1;
+        margin-bottom: 12px;
     }
-    .empty-state i {
-        opacity: 0.3;
+    .empty-state-text {
+        font-weight: 600;
+        color: #64748b;
+        margin: 0;
+    }
+    .empty-state-sub {
+        font-size: 13px;
+        color: #94a3b8;
     }
 
     /* ========================================== */
     /* RESPONSIVE */
     /* ========================================== */
     @media (max-width: 768px) {
-        .welcome-content {
+        .dashboard-header {
             flex-direction: column;
             text-align: center;
+            padding: 20px;
         }
-        .welcome-title { font-size: 20px; }
-        .stat-value { font-size: 22px; }
-        .stat-card { padding: 16px; }
+        .header-title { font-size: 18px; }
+        .header-right { flex-wrap: wrap; justify-content: center; }
+        .stat-card-value { font-size: 22px; }
+        .status-strip { padding: 12px 16px; gap: 6px; }
+        .status-strip-item { padding: 4px 10px; }
+        .status-strip-label { font-size: 10px; }
+        .status-strip-value { font-size: 14px; }
+        .widget-header { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 576px) {
+        .stat-card { min-height: 110px; padding: 16px; }
+        .stat-card-icon { width: 40px; height: 40px; font-size: 18px; }
+        .stat-card-value { font-size: 20px; }
     }
 </style>
 @endpush
@@ -395,8 +662,14 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Graphique des ventes
+    // Graphique des ventes avec dégradé
     const ctx = document.getElementById('salesChart').getContext('2d');
+    
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(16, 185, 129, 0.3)');
+    gradient.addColorStop(0.5, 'rgba(16, 185, 129, 0.1)');
+    gradient.addColorStop(1, 'rgba(16, 185, 129, 0.01)');
+    
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -405,15 +678,18 @@
                 label: 'Chiffre d\'affaires (FC)',
                 data: {!! json_encode($ventesParJour ?? [0, 0, 0, 0, 0, 0, 0]) !!},
                 borderColor: '#10b981',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                backgroundColor: gradient,
                 borderWidth: 3,
                 tension: 0.4,
                 fill: true,
                 pointBackgroundColor: '#10b981',
-                pointBorderColor: 'white',
+                pointBorderColor: '#fff',
                 pointBorderWidth: 2,
                 pointRadius: 5,
-                pointHoverRadius: 7
+                pointHoverRadius: 8,
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#10b981',
+                pointHoverBorderWidth: 3
             }]
         },
         options: {
@@ -422,6 +698,11 @@
             plugins: { 
                 legend: { display: false },
                 tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleColor: '#fff',
+                    bodyColor: '#e2e8f0',
+                    cornerRadius: 12,
+                    padding: 12,
                     callbacks: {
                         label: function(context) {
                             return context.parsed.y.toLocaleString() + ' FC';
@@ -432,17 +713,21 @@
             scales: {
                 y: { 
                     beginAtZero: true, 
-                    grid: { color: '#e2e8f0' },
+                    grid: { color: 'rgba(226, 232, 240, 0.5)' },
                     ticks: {
                         callback: function(value) {
                             if (value >= 1000) {
                                 return (value / 1000).toFixed(0) + 'k';
                             }
                             return value;
-                        }
+                        },
+                        color: '#94a3b8'
                     }
                 },
-                x: { grid: { display: false } }
+                x: { 
+                    grid: { display: false },
+                    ticks: { color: '#94a3b8' }
+                }
             },
             interaction: {
                 intersect: false,

@@ -45,27 +45,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="stats-card">
-                <div class="stats-icon bg-warning-light">
-                    <i class="fas fa-clock text-warning"></i>
-                </div>
-                <div class="stats-content">
-                    <div class="stats-label">Commandes en cours</div>
-                    <div class="stats-number">{{ $commandesEnCoursTotal ?? 0 }}</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="stats-card">
-                <div class="stats-icon bg-success-light">
-                    <i class="fas fa-check-circle text-success"></i>
-                </div>
-                <div class="stats-content">
-                    <div class="stats-label">Commandes prêtes</div>
-                    <div class="stats-number">{{ $commandesPretesTotal ?? 0 }}</div>
-                </div>
-            </div>
+        
         </div>
     </div>
 
